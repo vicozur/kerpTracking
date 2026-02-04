@@ -15,20 +15,35 @@
 #--------------------------------------------------------------------
 
 # CI_ENVIRONMENT = production
+CI_ENVIRONMENT = development
 
 #--------------------------------------------------------------------
 # APP
 #--------------------------------------------------------------------
 
-# app.baseURL = ''
 # If you have trouble with `.`, you could also use `_`.
-# app_baseURL = ''
-# app.forceGlobalSecureRequests = false
-# app.CSPEnabled = false
+app.baseURL = 'http://localhost/kerpTracking/public/'
+app.indexPage = ''
+app.forceGlobalSecureRequests = false
+app.CSPEnabled = false
+
+google.client_id = ''
+google.client_secret = ''
+
 
 #--------------------------------------------------------------------
 # DATABASE
 #--------------------------------------------------------------------
+
+database.default.hostname = localhost
+database.default.database = dbkerpweb
+database.default.username = postgres
+database.default.password = Admin123.
+database.default.DBDriver = Postgre
+database.default.DBPrefix =
+database.default.charset = utf8
+database.default.DBCollat = utf8_general_ci
+database.default.port = 5432
 
 # database.default.hostname = localhost
 # database.default.database = ci4
