@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const submitButton = form.querySelector('button[type="submit"]');
         submitButton.disabled = true;
         submitButton.textContent = 'Procesando...';
-        url = `${DIRECTORY_URL}/importar`
+        url = `${TRACKING_URL}/importar`
         // --- 2. Enviar la Petición AJAX (Fetch) ---
         fetch(url, {
             method: 'POST',
@@ -101,15 +101,15 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function openForm(data = null) {
-    // DIRECTORY_URL
+    // TRACKING_URL
     var url;
     if (data) {
         console.log(data);
-        url = `${DIRECTORY_URL}/clienteForm/${data}`;
+        url = `${TRACKING_URL}/procedureForm/${data}`;
     } else {
-        url = `${DIRECTORY_URL}/clienteForm/`
+        url = `${TRACKING_URL}/procedureForm/`
     }
-    //const url = data.directory_id ? `${DIRECTORY_URL}/clienteForm/${data.directory_id}` : `${DIRECTORY_URL}/clienteForm/`;
+    //const url = data.directory_id ? `${TRACKING_URL}/clienteForm/${data.directory_id}` : `${TRACKING_URL}/clienteForm/`;
     console.log(url);
     window.location.href = url;
 }
@@ -129,7 +129,7 @@ $(document).ready(function() {
         
         // 2. Configuración AJAX
         ajax: { 
-            url: `${DIRECTORY_URL}/getData`, 
+            url: `${TRACKING_URL}/getData`, 
             type: "POST", 
             // 💡 Pasamos el token CSRF a la data
             data: function(d) {
@@ -190,7 +190,7 @@ $(document).ready(function() {
 
 // Toggle status
 function toggleStatus(id, current) {
-    fetch(`${DIRECTORY_URL}/toggleStatus/${id}`, { method: "POST" })
+    fetch(`${TRACKING_URL}/toggleStatus/${id}`, { method: "POST" })
         .then(res => res.json())
         .then(res => {
             if (res.status === "success") {

@@ -3,11 +3,19 @@
 namespace App\Controllers;
 
 // ESTA LÍNEA ES VITAL
+
+use App\Models\AssignModel;
 use Google\Client as GoogleClient;
 use App\Models\UserModel;
 
 class LoginController extends BaseController
 {
+    protected $assignModel;
+    public function __construct()
+    {
+        $this->assignModel = new AssignModel();
+    }
+
     public function index(): string
     {
         return view('login');
@@ -167,11 +175,24 @@ class LoginController extends BaseController
                     'phone'      => 0,
                     'created_user' => 'SYSTEM_GOOGLE',
                     'photo_url'  => $googleUser->picture,
-                    'status'     => 1
+                    'user_type' => 'PROPIETARIO',
+                    'ci' => '0',
+                    'ext' => ' ',
+                    'status' => true
                 ];
 
-                $userModel->insert($newData);
+                $insertId = $userModel->insert($newData);
+                //$userModel->insert($newData);
                 $user = $userModel->where('email', $googleUser->email)->first();
+
+                if ($insertId) {
+                    $this->assignModel->insert([
+                        'user_user_id'       => $insertId,
+                        'profile_profile_id' => 2, // Perfil por defecto
+                        'created_user'       => 'SYSTEM_GOOGLE'
+                    ]);
+                    //return $this->response->setJSON(['status' => 'success', 'message' => 'Usuario registrado nuevo por CI.']);
+                }
             }
             // Guardar datos en sesión
             session()->set([
@@ -185,7 +206,7 @@ class LoginController extends BaseController
                 'loggedIn' => true,
                 'isLoggedIn' => true
             ]);
-
+            
             return redirect()->to(base_url('home'));
         } catch (\Exception $e) {
             // Si el código es inválido, Google lanzará el error aquí

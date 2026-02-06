@@ -87,5 +87,16 @@ class UserController extends BaseController
         }
     }
     
+    public function checkCI()
+    {
+        $ci = $this->request->getPost('ci');
+        $user = $this->userModel->where('ci', $ci)->first();
+
+        if ($user) {
+            return $this->response->setJSON(['exists' => true, 'message' => 'Este CI ya está registrado.']);
+        }
+
+        return $this->response->setJSON(['exists' => false]);
+    }
     
 }

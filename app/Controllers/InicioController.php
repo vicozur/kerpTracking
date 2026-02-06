@@ -13,6 +13,7 @@ class InicioController extends BaseController
         $resultado = $kerp->listarUsuarios();
         print_r($resultado);
         */
+        
         $data = [
             'title' => "Inicio",
             'titleMod' => ""

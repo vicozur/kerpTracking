@@ -1,7 +1,7 @@
 <?php echo $this->extend('template/layout'); ?>
 <?php $this->section('content'); ?>
 <script>
-    const DIRECTORY_URL = "<?= base_url('tracking') ?>";
+    const TRACKING_URL = "<?= base_url('tracking') ?>";
     // 🔑 Generamos las variables CSRF de forma segura
     const CI_CSRF_NAME = '<?= csrf_token() ?>'; 
     const CI_CSRF_HASH = '<?= csrf_hash() ?>';

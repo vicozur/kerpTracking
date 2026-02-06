@@ -22,12 +22,14 @@ class TrackingController extends BaseController
 
     public function index()
     {
+        /*
         $kerp = new KerpClient();
         $resultado = $kerp->listarMisTramites();
         var_dump(json_encode($resultado));
+        */
         $data = [
-            'title' => "Seguimiento de tramites",
-            'titleMod' => "Administración y Seguimiento de tramites",
+            'title' => "Mis tramites",
+            'titleMod' => "Seguimiento de tramites",
         ];
 
         return view('administration/tracking', $data);

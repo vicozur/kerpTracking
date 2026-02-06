@@ -15,6 +15,16 @@ $routes->get('home', 'InicioController::index');         // Página después del
 // Paginas de configuracion tracking
 
 $routes->get('tracking', 'Administration\TrackingController::index');
+
+$routes->get('tracking/procedureForm/(:num)', 'Administration\ProcedureController::index/$1');
+$routes->get('tracking/procedureForm', 'Administration\ProcedureController::index');
+$routes->post('tracking/procedureForm/create', 'Administration\ProcedureController::create');
+$routes->post('tracking/procedureForm/update/(:num)', 'Administration\ProcedureController::update/$1');
+
+
+
 // Registro de user en inicio de session
 $routes->get('user', 'User\UserController::index');
 $routes->post('user/save', 'User\UserController::save');
+
+$routes->get('procedure', 'Administration\ProcedureController::index');
