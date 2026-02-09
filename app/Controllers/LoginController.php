@@ -127,7 +127,9 @@ class LoginController extends BaseController
         //$client->setClientId('448405850018-rcufp6idnmkmdb4kv1ndqjltlhngqupm.apps.googleusercontent.com');
         //$client->setClientSecret('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'); // Espacio eliminado
         
-        $client->setRedirectUri('http://localhost/kerpTracking/public/login/googleAuth');
+        //$client->setRedirectUri('http://localhost/kerpTracking/public/login/googleAuth');
+        // En lugar de poner la URL a mano, usamos la función base_url()
+        $client->setRedirectUri(base_url('login/googleAuth'));
         $client->addScope("email");
         $client->addScope("profile");
 
