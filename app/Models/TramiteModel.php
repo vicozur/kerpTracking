@@ -6,7 +6,7 @@ use CodeIgniter\Model;
 
 class TramiteModel extends Model
 {
-    protected $table      = 'tracking.tramite';
+    protected $table      = 'tracking.tramite'; // Nombre real en tu DB
     protected $primaryKey = 'id_tramite';
 
     protected $useTimestamps = true;
@@ -25,22 +25,30 @@ class TramiteModel extends Model
         'tipo_persona',
         'created_user'
     ];
-    /*
-            "id_tramite" SERIAL NOT NULL,
-            "cite_tramite" VARCHAR(100) NULL DEFAULT NULL,
-            "nombre_tramite" VARCHAR(255) NULL DEFAULT NULL,
-            "estado_tramite" VARCHAR(50) NULL DEFAULT NULL,
-            "estado_reg" VARCHAR(10) NULL DEFAULT NULL,
-            "observacion" VARCHAR(300) NULL DEFAULT NULL,
-            "num_resolucion" INTEGER NULL DEFAULT NULL,
-            "nombre_completo" TEXT NULL DEFAULT NULL,
-            "tipo_persona" VARCHAR(50) NULL DEFAULT NULL,
-            "created_user" VARCHAR(150) NULL DEFAULT NULL,
-            "created_at" TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
-            "id_tipo_tramite" INTEGER NULL DEFAULT NULL,
-            */
 
     protected $returnType = 'array';
-    protected $useSoftDeletes = false;
 
+    /**
+     * Obtiene el listado usando los métodos internos del modelo ($this)
+     * He renombrado la función a getListadoCompleto para que coincida 
+     * con lo que tu controlador está buscando.
+     */
+    public function getListadoCompleto($user)
+    {
+        return $this->select('tracking.tramite.*, tt.nombre_tramite as nombre_tipo, d.id as doc_id')
+            ->join('tracking.tipo_tramite tt', 'tt.id_tipo_tramite = tracking.tramite.id_tipo_tramite', 'left')
+            ->join('tracking.document d', 'd.id_tramite = tracking.tramite.id_tramite', 'left')
+            ->where('tracking.tramite.created_user', $user) 
+            ->orderBy('tracking.tramite.created_at', 'DESC')
+                ->findAll(); // findAll() ya retorna el result array según $returnType
+    }
+
+    public function getListadoTramites()
+    {
+        return $this->select('tracking.tramite.*, tt.nombre_tramite as nombre_tipo, d.id as id_documento')
+            ->join('tracking.tipo_tramite tt', 'tt.id_tipo_tramite = tracking.tramite.id_tipo_tramite', 'left')
+            ->join('tracking.document d', 'd.id_tramite = tracking.tramite.id_tramite', 'left')
+            ->orderBy('tracking.tramite.created_at', 'DESC')
+            ->findAll();
+    }
 }

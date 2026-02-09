@@ -6,7 +6,7 @@ use App\Libraries\KerpClient;
 use App\Models\TipoTramiteModel;
 use App\Models\TramiteModel;
 
-class TrackingController extends BaseController
+class TramitController extends BaseController
 {
     protected $tramiteModel, $tipoTramiteModel;
     protected $session;
@@ -32,8 +32,7 @@ class TrackingController extends BaseController
         $resultado = $kerp->listarMisTramites();
         var_dump(json_encode($resultado));
         */
-        $todos = $this->tramiteModel->getListadoCompleto(session('user'));
-
+        $todos = $this->tramiteModel->getListadoTramites();
         // 1. Inicializamos el array de estadísticas
         $stats = [
             'TOTAL'      => count($todos),
@@ -54,10 +53,9 @@ class TrackingController extends BaseController
                 $stats['OBSERVADOS']++;
             }
         }
-
         $data = [
-            'title' => "Mis tramites",
-            'titleMod' => "Seguimiento de tramites",
+            'title' => "Tramites",
+            'titleMod' => "Aministrar de tramites",
             'tramites' => $todos,
             'stats'    => $stats, // <--- Aquí es donde se define para la vista
             'tipos'    => $this->tipoTramiteModel->getListadoTramites()
@@ -65,7 +63,7 @@ class TrackingController extends BaseController
 
 
 
-        return view('administration/tracking', $data);
+        return view('administration/tramit', $data);
     }
 
     public function directorio()
@@ -96,5 +94,32 @@ class TrackingController extends BaseController
     {
         $data = $this->tramiteModel->find($id);
         return $this->response->setJSON($data ? ['status'=>'success', 'data'=>$data] : ['status'=>'error']);
+    }
+
+    public function update_status()
+    {
+        $id = $this->request->getPost('id_tramite');
+        $estado = $this->request->getPost('estado_tramite');
+        $observacion = $this->request->getPost('observacion');
+
+        $data = [
+            'estado_tramite' => $estado,
+            'observacion'    => $observacion,
+            // Opcional: registrar quién hizo el cambio
+            // 'updated_user' => session()->get('user_id') 
+        ];
+
+
+        if ($this->tramiteModel->update($id, $data)) {
+            return $this->response->setJSON([
+                'status' => 'success',
+                'message' => 'El trámite ahora está en estado: ' . $estado
+            ]);
+        }
+
+        return $this->response->setJSON([
+            'status' => 'error',
+            'message' => 'No se pudo actualizar el estado.'
+        ]);
     }
 }

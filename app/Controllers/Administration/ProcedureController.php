@@ -18,6 +18,7 @@ class ProcedureController extends BaseController
         $this->tipoTramiteModel = new TipoTramiteModel();
         $this->documentModel = new DocumentModel();
         $this->tramiteModel = new TramiteModel();
+        $this->session = session();
     }
 
     public function index()
@@ -50,6 +51,7 @@ class ProcedureController extends BaseController
         */
         try {
             // 1. Insertar el Trámite primero para obtener el ID
+            $tipoSolicitante = $this->request->getPost('tipo_solicitante');
             $dataTramite = [
                 'id_tipo_tramite' => $this->request->getPost('tipo_tramite'),
                 'cite_tramite' => null,
@@ -59,8 +61,8 @@ class ProcedureController extends BaseController
                 'observacion' => null,
                 'num_resolucion' => null,
                 'nombre_completo' => null,
-                'tipo_persona' => 'PROPIETARIO',
-                'created_user' => 'SYSTEM'
+                'tipo_persona' => $tipoSolicitante,
+                'created_user' => session('user') ?? 'system'
             ];
             
             $idTramite = $this->tramiteModel->insert($dataTramite);
@@ -71,17 +73,29 @@ class ProcedureController extends BaseController
 
             $documentData = [
                 'id_tramite'   => $idTramite,
-                'created_user' => session()->get('user'), // O quien esté logueado
+                'created_user' => session('user') ?? 'system', // O quien esté logueado
             ];
+            
 
-            $fileMap = [
-                'doc_ci'            => 'doc_ci',
-                'doc_memorial'      => 'doc_memorial',
-                'doc_folio'         => 'doc_folio',
-                'doc_plano'         => 'doc_plano',
-                'doc_poder'         => 'doc_poder',
-                'doc_ci_tramitador' => 'doc_ci_tramitador'
-            ];
+            if ($tipoSolicitante === 'TRAMITADOR') {
+                $fileMap = [
+                    'doc_ci'            => 'doc_ci',
+                    'doc_memorial'      => 'doc_memorial',
+                    'doc_folio'         => 'doc_folio',
+                    'doc_plano'         => 'doc_plano',
+                    'doc_poder'         => 'doc_poder',
+                    'doc_ci_tramitador' => 'doc_ci_tramitador'
+                ];
+            } else {
+                $fileMap = [
+                    'doc_ci'            => 'doc_ci',
+                    'doc_memorial'      => 'doc_memorial',
+                    'doc_folio'         => 'doc_folio',
+                    'doc_plano'         => 'doc_plano'
+                ];
+            }
+
+            
 
             foreach ($fileMap as $inputName => $columnName) {
                 $file = $this->request->getFile($inputName);

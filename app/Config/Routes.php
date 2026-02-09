@@ -21,6 +21,16 @@ $routes->get('tracking/procedureForm', 'Administration\ProcedureController::inde
 $routes->post('tracking/procedureForm/create', 'Administration\ProcedureController::create');
 $routes->post('tracking/procedureForm/update/(:num)', 'Administration\ProcedureController::update/$1');
 
+$routes->get('tramite', 'Administration\TramitController::index');
+$routes->get('tramite/changestate/(:num)', 'Administration\TramitController::changestate/$1');
+$routes->get('tramite/descargar/(:num)/doc_ci', 'Administration\TramitController::downloadCI/$1');
+$routes->get('tramite/descargar/(:num)/doc_memorial', 'Administration\TramitController::downloadMemorial/$1');
+$routes->get('tramite/descargar/(:num)/doc_folio', 'Administration\TramitController::downloadFolio/$1');
+$routes->get('tramite/descargar/(:num)/doc_plano', 'Administration\TramitController::downloadPlano/$1');
+
+$routes->get('tramite/descargar/(:num)/doc_ci_tramitador', 'Administration\TramitController::downloadCITramitador/$1');
+$routes->get('tramite/descargar/(:num)/doc_poder', 'Administration\TramitController::downloadPoderTramitador/$1');
+
 
 
 // Registro de user en inicio de session

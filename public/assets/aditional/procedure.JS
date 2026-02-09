@@ -2,6 +2,26 @@ document.addEventListener('DOMContentLoaded', function () {
     const myForm = document.getElementById('myForm');
     const btnSave = myForm.querySelector('button[type="button"]'); // Seleccionamos tu botón de guardar
 
+    const selectSolicitante = document.getElementById('tipo_solicitante');
+    const sectionTramitador = document.getElementById('section_tramitador');
+    const inputsTramitador = sectionTramitador.querySelectorAll('input[type="file"]');
+
+    function toggleTramitador() {
+        if (selectSolicitante.value === 'TRAMITADOR') {
+            sectionTramitador.style.display = 'block';
+        } else {
+            sectionTramitador.style.display = 'none';
+            // Limpiar los archivos si se oculta la sección
+            inputsTramitador.forEach(input => input.value = '');
+        }
+    }
+
+    // Escuchar el cambio
+    selectSolicitante.addEventListener('change', toggleTramitador);
+
+    // Ejecutar al cargar por si hay un valor pre-seleccionado
+    toggleTramitador();
+
     btnSave.addEventListener('click', async function (e) {
         
         // 1. Validaciones previas antes de enviar

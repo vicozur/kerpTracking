@@ -3,7 +3,7 @@
 <script>
     const TRACKING_URL = "<?= base_url('tracking') ?>";
     // 🔑 Generamos las variables CSRF de forma segura
-    const CI_CSRF_NAME = '<?= csrf_token() ?>'; 
+    const CI_CSRF_NAME = '<?= csrf_token() ?>';
     const CI_CSRF_HASH = '<?= csrf_hash() ?>';
     // ✅ CORRECCIÓN CLAVE: Define la URL del JSON de idioma aquí.
     const DATATABLES_LANGUAGE_URL = "<?= base_url('assets/datatables/es-ES.json') ?>";
@@ -21,46 +21,64 @@
     <hr>
 </div>
 
+<div class="row mb-4 text-center">
+    <?php foreach (['TOTAL' => 'secondary', 'PENDIENTE' => 'warning', 'EN CURSO' => 'info', 'APROBADO' => 'success', 'OBSERVADOS' => 'danger'] as $key => $col): ?>
+        <div class="col-md-2">
+            <div class="card border-<?= $col ?> shadow-sm">
+                <div class="card-body py-2">
+                    <small class="text-uppercase fw-bold"><?= $key ?></small>
+                    <h3 class="mb-0 text-<?= $col ?>"><?= $stats[$key] ?></h3>
+                </div>
+            </div>
+        </div>
+    <?php endforeach; ?>
+</div>
+
+<div class="d-flex justify-content-between mb-3">
+    <div class="btn-group">
+        <button onclick="filtrar('PENDIENTE')" class="btn btn-sm btn-outline-warning">Pendientes</button>
+        <button onclick="filtrar('fa-exclamation-circle')" class="btn btn-sm btn-outline-danger">Observados</button>
+        <button onclick="filtrar('')" class="btn btn-sm btn-outline-secondary">Todos</button>
+    </div>
+    <div id="buttons_export"></div>
+</div>
 <div class="table-responsive mt-3">
-    <table class="table table-bordered table-hover table-sm display nowrap w-100" id="trackingTable">
-        <thead>
+    <table class="table table-hover dt-responsive nowrap w-100" id="tablaTramites">  
+        <thead class="table-dark">
             <tr>
-                <th>#</th>
-                <th>Ide. tr&aacute;mite</th>
-                <th>Persona</th>
-                <th>Tipo tr&aacute;mite</th>
-                <th>Fecha ingreso</th>
-                <th>Dias transcurridos</th>
+                <th>ID</th>
+                <th>Trámite</th>
+                <th>Estado</th>
+                <th>Solicitante</th>
+                <th>Fecha</th>
+                <th>Acciones</th>
             </tr>
         </thead>
+        <tbody>
+            <?php foreach ($tramites as $tr): ?>
+                <tr>
+                    <td><?= $tr['id_tramite'] ?></td>
+                    <td><strong><?= esc($tr['nombre_tipo']) ?></strong></td>
+                    <td>
+                        <span class="badge bg-<?= ($tr['estado_tramite'] == 'PENDIENTE' ? 'warning' : ($tr['estado_tramite'] == 'APROBADO' ? 'success' : 'info')) ?>">
+                            <?= $tr['estado_tramite'] ?>
+                        </span>
+                        <?php if (!empty($tr['observacion'])): ?>
+                            <i class="fas fa-exclamation-circle text-danger ms-1" data-bs-toggle="tooltip" title="<?= esc($tr['observacion']) ?>"></i>
+                        <?php endif; ?>
+                    </td>
+                    <td><?= esc($tr['nombre_completo']) ?> <br><small class="text-muted"><?= $tr['tipo_persona'] ?></small></td>
+                    <td><?= date('d/m/Y', strtotime($tr['created_at'])) ?></td>
+                    <td>
+                        <button onclick="editarTramite(<?= $tr['id_tramite'] ?>)" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></button>
+                        <a href="<?= base_url("tracking/descargar/{$tr['id_tramite']}/doc_ci") ?>" class="btn btn-sm btn-outline-primary"><i class="fas fa-download"></i></a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
     </table>
 </div>
 
-<!-- 🟢 Modal -->
-<div class="modal fade" id="trackingModal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <form id="uploadForm" enctype="multipart/form-data">
-                <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="uploadModalTitle">Importar Archivo</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="files" class="form-label">Archivos</label>
-                        <input type="file" class="form-control" id="files" name="files[]" multiple>
-                    </div>
-                    <!-- 🔹 Aquí se mostrarán los nombres -->
-                    <ul id="fileList" class="list-group mt-2"></ul>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Guardar</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 
 <script src="<?= base_url('assets/aditional/directoryScript.js') ?>"></script>
 <?php $this->endSection(); ?>

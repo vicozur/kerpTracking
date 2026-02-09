@@ -20,6 +20,13 @@
         <form id="myForm">
             <div class="row g-3">
                 <div class="col-md-12">
+                    <label class="form-label">Tipo de solicitante <b style="color: red;">*</b></label>
+                    <select name="tipo_solicitante" id="tipo_solicitante" class="form-select" required>
+                        <option value="PROPIETARIO">PROPIETARIO</option>
+                        <option value="TRAMITADOR">TRAMITADOR</option>
+                    </select>
+                </div>
+                <div class="col-md-12">
                     <input type="hidden" id="id_tramite" name="id_tramite" value="<?= isset($tramite) ? $tramite['id_tramite'] : '' ?>">
                     <label class="form-label">Tipo de tr&aacute;mite <b style="color: red;">*</b></label>
                     <select name="tipo_tramite" class="form-select" required>
@@ -50,14 +57,19 @@
                 </div>
 
                 <hr>
-                <h5><b>Tramitador (Opcional)</b></h5>
-                <div class="col-md-6">
-                    <label class="form-label">Poder de Tramitador</label>
-                    <input type="file" name="doc_poder" class="form-control" accept=".pdf">
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label">CI Tramitador</label>
-                    <input type="file" name="doc_ci_tramitador" class="form-control" accept=".pdf">
+                <div id="section_tramitador" style="display: none;">
+                    <hr>
+                    <h5><b>Tramitador (Opcional)</b></h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label">Poder de Tramitador</label>
+                            <input type="file" name="doc_poder" class="form-control" accept=".pdf">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">CI Tramitador</label>
+                            <input type="file" name="doc_ci_tramitador" class="form-control" accept=".pdf">
+                        </div>
+                    </div>
                 </div>
 
                 <div class="col-12 mt-4 text-end">
