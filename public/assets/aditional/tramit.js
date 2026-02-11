@@ -58,7 +58,7 @@ function generarBotonesAccion(row) {
     // Usamos el ID de documento para saber si mostrar opciones
     if (!row.id_documento) return `<span class="text-muted">Sin documentos</span>`;
 
-    let html = `
+    let html  = `
     <div class="btn-group">
         <button class="btn btn-sm btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown">Acciones</button>
         <ul class="dropdown-menu">
@@ -67,18 +67,20 @@ function generarBotonesAccion(row) {
             <li><a class="dropdown-item" href="javascript:void(0)" onclick="modalEstado(${row.id_tramite}, 'RECHAZADO')"><i class="fas fa-times text-danger"></i> Rechazar</a></li>
             <li><hr class="dropdown-divider"></li>
             <li><h6 class="dropdown-header text-info">Documentos Propietario</h6></li>
-            <li><a class="dropdown-item" target="_blank" href="<?= base_url('tramite/descargar/') ?>${row.id_tramite}/doc_ci">Ver C.I.</a></li>
-            <li><a class="dropdown-item" target="_blank" href="<?= base_url('tramite/descargar/') ?>${row.id_tramite}/doc_memorial">Ver Memorial</a></li>
-            <li><a class="dropdown-item" target="_blank" href="<?= base_url('tramite/descargar/') ?>${row.id_tramite}/doc_folio">Ver Folio Real</a></li>
-            <li><a class="dropdown-item" target="_blank" href="<?= base_url('tramite/descargar/') ?>${row.id_tramite}/doc_plano">Ver Plano</a></li>`;
-    // 3. Bloque condicional para TRAMITADOR
+            <li><a class="dropdown-item" target="_blank" href="${TRACKING_URL}/descargar/${row.id_tramite}/doc_ci"><i class="fas fa-file-pdf"></i> Ver C.I.</a></li>
+            <li><a class="dropdown-item" target="_blank" href="${TRACKING_URL}/descargar/${row.id_tramite}/doc_memorial"><i class="fas fa-file-pdf"></i> Ver Memorial</a></li>
+            <li><a class="dropdown-item" target="_blank" href="${TRACKING_URL}/descargar/${row.id_tramite}/doc_folio"><i class="fas fa-file-pdf"></i> Ver Folio Real</a></li>
+            <li><a class="dropdown-item" target="_blank" href="${TRACKING_URL}/descargar/${row.id_tramite}/doc_plano"><i class="fas fa-file-pdf"></i> Ver Plano</a></li>`;
+
+    // Bloque condicional para TRAMITADOR
     if (row.tipo_persona === 'TRAMITADOR') {
         html += `
             <li><hr class="dropdown-divider"></li>
             <li><h6 class="dropdown-header text-info">Documentos Tramitador</h6></li>
-            <li><a class="dropdown-item" target="_blank" href="<?= base_url('tramite/descargar/') ?>${row.id_tramite}/doc_ci_tramitador"><i class="fas fa-id-card text-info"></i> C.I. Tramitador</a></li>
-            <li><a class="dropdown-item" target="_blank" href="<?= base_url('tramite/descargar/') ?>${row.id_tramite}/doc_poder"><i class="fas fa-file-contract text-info"></i> Poder Legal</a></li>`;
+            <li><a class="dropdown-item" target="_blank" href="${TRACKING_URL}/descargar/${row.id_tramite}/doc_ci_tramitador"><i class="fas fa-id-card text-info"></i> C.I. Tramitador</a></li>
+            <li><a class="dropdown-item" target="_blank" href="${TRACKING_URL}/descargar/${row.id_tramite}/doc_poder"><i class="fas fa-file-contract text-info"></i> Poder Legal</a></li>`;
     }
+
     html += `
         </ul>
     </div>`;
