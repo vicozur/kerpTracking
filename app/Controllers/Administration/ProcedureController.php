@@ -52,12 +52,14 @@ class ProcedureController extends BaseController
         try {
             // 1. Insertar el Trámite primero para obtener el ID
             $tipoSolicitante = $this->request->getPost('tipo_solicitante');
+            $datosTipo = $this->tipoTramiteModel->find($this->request->getPost('tipo_tramite'));
+
             $dataTramite = [
                 'id_tipo_tramite' => $this->request->getPost('tipo_tramite'),
                 'cite_tramite' => null,
-                'nombre_tramite' => null,
-                'estado_tramite'  => 'PENDIENTE',
-                'estado_reg' => null,
+                'nombre_tramite' => $datosTipo["nombre_tramite"],
+                'estado_tramite'  => 'Por Asignar',
+                'estado_reg' => 'Activo',
                 'observacion' => null,
                 'num_resolucion' => null,
                 'nombre_completo' => null,

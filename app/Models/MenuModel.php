@@ -9,26 +9,22 @@ class MenuModel extends Model
     public function getMenuByUser($username)
     {
         return $this->db->query("
-            SELECT 
-                u.username, 
-                t.name AS taskname,
-                t.route, 
-                t.icon, 
-                t.parent, 
-                p.name AS profilename
-            FROM tracking.user u
-            INNER JOIN tracking.assign a 
-                ON u.user_id = a.user_user_id
-            INNER JOIN tracking.profile p 
-                ON a.profile_profile_id = p.profile_id
-            INNER JOIN tracking.profile_has_task pht 
-                ON p.profile_id = pht.profile_profile_id
-            INNER JOIN tracking.task t 
-                ON pht.task_task_id = t.task_id
-            WHERE u.username = ? 
-                AND u.status = true 
-                AND t.status = true
-            ORDER BY t.parent ASC
-        ", [$username])->getResultArray();
+        SELECT DISTINCT  -- <--- Esto elimina las filas idénticas
+            u.username, 
+            t.name AS taskname,
+            t.route, 
+            t.icon, 
+            t.parent, 
+            p.name AS profilename
+        FROM tracking.user u
+        INNER JOIN tracking.assign a ON u.user_id = a.user_user_id
+        INNER JOIN tracking.profile p ON a.profile_profile_id = p.profile_id
+        INNER JOIN tracking.profile_has_task pht ON p.profile_id = pht.profile_profile_id
+        INNER JOIN tracking.task t ON pht.task_task_id = t.task_id
+        WHERE u.username = ? 
+            AND u.status = true 
+            AND t.status = true
+        ORDER BY t.parent ASC
+    ", [$username])->getResultArray();
     }
 }

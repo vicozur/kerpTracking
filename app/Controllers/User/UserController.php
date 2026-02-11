@@ -57,7 +57,8 @@ class UserController extends BaseController
         if (!$existingUser) {
             // --- LÓGICA DE REGISTRO NUEVO ---
             $data['created_user'] = $this->session->get('user') ?? 'system';
-            $data['password'] = password_hash($username, PASSWORD_DEFAULT);
+            $data['password'] = password_hash('Admin123.', PASSWORD_DEFAULT);
+            // password_hash($username, PASSWORD_DEFAULT);
 
             $insertId = $this->userModel->insert($data);
 
@@ -65,7 +66,8 @@ class UserController extends BaseController
                 $this->assignModel->insert([
                     'user_user_id'       => $insertId,
                     'profile_profile_id' => 2, // Perfil por defecto
-                    'created_user'       => $data['created_user']
+                    'created_user'       => $this->session->get('user') ?? 'system',
+                    'status' => true
                 ]);
                 return $this->response->setJSON(['status' => 'success', 'message' => 'Usuario registrado nuevo por CI.']);
             }

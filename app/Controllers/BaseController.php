@@ -36,6 +36,7 @@ abstract class BaseController extends Controller
             
             // Usamos ?? [] para garantizar que siempre pase un array a la función
             $menuGrouped = $this->groupMenu($this->menuItems ?? []);
+            //var_dump($menuGrouped);
         }
 
         // 3. HACER VARIABLES DISPONIBLES EN VISTAS
@@ -54,10 +55,17 @@ abstract class BaseController extends Controller
             return $grouped;
         }
 
+        $vistos = []; // Para trackear qué rutas ya agregamos
+
         foreach ($menuItems as $item) {
-            // Verificamos que 'parent' exista para evitar otros errores
             $parentId = $item['parent'] ?? 0;
-            $grouped[$parentId][] = $item;
+            $ruta = $item['route'] ?? '';
+
+            // Solo agregamos si no hemos visto esta ruta para este padre
+            if (!isset($vistos[$parentId][$ruta])) {
+                $grouped[$parentId][] = $item;
+                $vistos[$parentId][$ruta] = true;
+            }
         }
         return $grouped;
     }

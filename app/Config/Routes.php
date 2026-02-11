@@ -23,19 +23,24 @@ $routes->post('tracking/procedureForm/create', 'Administration\ProcedureControll
 $routes->post('tracking/procedureForm/update/(:num)', 'Administration\ProcedureController::update/$1');
 
 $routes->get('tramite', 'Administration\TramitController::index');
-$routes->get('tramite/changestate/(:num)', 'Administration\TramitController::changestate/$1');
-$routes->get('tramite/descargar/(:num)/doc_ci', 'Administration\TramitController::downloadCI/$1');
-$routes->get('tramite/descargar/(:num)/doc_memorial', 'Administration\TramitController::downloadMemorial/$1');
-$routes->get('tramite/descargar/(:num)/doc_folio', 'Administration\TramitController::downloadFolio/$1');
-$routes->get('tramite/descargar/(:num)/doc_plano', 'Administration\TramitController::downloadPlano/$1');
+// Cambiamos 'tramite' por 'tracking' para que coincida con tu JS (${TRACKING_URL}/getData)
+$routes->post('tramite/getData', 'Administration\TramitController::ajaxListado');
+$routes->get('tramite/changestate/(:num)', 'Administration\TramitController::descargar/$1');
+$routes->get('tramite/descargar/(:num)/(:any)', 'Administration\TramitController::descargar/$1/$2');
+$routes->get('tramite/descargar/(:num)/(:any)', 'Administration\TramitController::descargar/$1/$2');
+$routes->get('tramite/descargar/(:num)/(:any)', 'Administration\TramitController::descargar/$1/$2');
+$routes->get('tramite/descargar/(:num)/(:any)', 'Administration\TramitController::descargar/$1/$2');
 
-$routes->get('tramite/descargar/(:num)/doc_ci_tramitador', 'Administration\TramitController::downloadCITramitador/$1');
-$routes->get('tramite/descargar/(:num)/doc_poder', 'Administration\TramitController::downloadPoderTramitador/$1');
+$routes->get('tramite/descargar/(:num)/(:any)', 'Administration\TramitController::descargar/$1/$2');
+$routes->get('tramite/descargar/(:num)/(:any)', 'Administration\TramitController::descargar/$1/$2');
 
-
+$routes->post('tramite/updateTramite', 'Administration\TramitController::updateTramite');
 
 // Registro de user en inicio de session
 $routes->get('user', 'User\UserController::index');
+$routes->get('user/checkCI', 'User\UserController::checkCI');
 $routes->post('user/save', 'User\UserController::save');
 
 $routes->get('procedure', 'Administration\ProcedureController::index');
+
+$routes->get('paymentqr', 'Administration\PaymentQRController::index');

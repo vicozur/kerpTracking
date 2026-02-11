@@ -38,20 +38,15 @@ class TrackingController extends BaseController
         $stats = [
             'TOTAL'      => count($todos),
             'PENDIENTE'  => 0,
-            'EN CURSO'   => 0,
             'APROBADO'   => 0,
-            'FINALIZADO' => 0,
-            'OBSERVADOS' => 0
+            'RECHAZADO' => 0
         ];
 
         // 2. Llenamos los contadores recorriendo los trámites
         foreach ($todos as $t) {
-            $estado = strtoupper($t['estado_tramite']); // Normalizamos a mayúsculas
+            $estado = strtoupper($t['estado_reg']); // Normalizamos a mayúsculas
             if (array_key_exists($estado, $stats)) {
                 $stats[$estado]++;
-            }
-            if (!empty($t['observacion'])) {
-                $stats['OBSERVADOS']++;
             }
         }
 

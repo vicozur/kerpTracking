@@ -108,20 +108,40 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function enviarFormulario() {
         const formData = new FormData(userForm);
-        
+
         fetch(userForm.action, {
-            method: 'POST',
+            method: "POST",
             body: formData,
-            headers: {'X-Requested-With': 'XMLHttpRequest'}
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.status === 'success') {
-                Swal.fire('¡Guardado!', data.message, 'success')
-                    .then(() => window.location.href = '<?= base_url("usuarios") ?>');
+            headers: { "X-Requested-With": "XMLHttpRequest" },
+        }).then((res) => {
+            if (!res.ok) throw new Error("Error en el servidor");
+            return res.json();
+        }).then((data) => {
+            console.log("Respuesta servidor:", data); // Mira esto en la consola F12
+            // IMPORTANTE: Verifica si tu controlador manda 'success' o 'SUCCESS'
+            if (data.status === "success" || data.success === true) {
+                Swal.fire({
+                    title: "¡Guardado!",
+                    text: data.message,
+                    icon: "success",
+                    confirmButtonText: "Ir al Login",
+                }).then((result) => {
+                    // Forzamos la redirección
+                    window.location.href = LOGIN_URL;
+                });
             } else {
-                Swal.fire('Error', data.message, 'error');
+                Swal.fire("Error", data.message || "Error desconocido", "error");
             }
+        })
+        .catch((error) => {
+            console.error("Error en fetch:", error);
+            Swal.fire(
+                "Error Critico",
+                "No se pudo procesar la solicitud",
+                "error",
+            );
         });
     }
+    
+
 });

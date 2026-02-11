@@ -6,7 +6,7 @@ use CodeIgniter\Model;
 
 class AssignModel extends Model
 {
-    protected $table      = 'directory.assign';
+    protected $table      = 'tracking.assign';
     protected $primaryKey = 'assign_id';
 
     protected $useTimestamps = true;
