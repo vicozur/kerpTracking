@@ -4,17 +4,19 @@ namespace App\Controllers\Administration;
 use App\Controllers\BaseController;
 use App\Libraries\KerpClient;
 use App\Models\TipoTramiteModel;
+use App\Models\TramiteDetalleModel;
 use App\Models\TramiteModel;
 
 class TrackingController extends BaseController
 {
-    protected $tramiteModel, $tipoTramiteModel;
+    protected $tramiteModel, $tipoTramiteModel, $tramiteDetailHistory;
     protected $session;
 
     public function __construct()
     {
         $this->tramiteModel = new TramiteModel();
         $this->tipoTramiteModel = new TipoTramiteModel();
+        $this->tramiteDetailHistory = new TramiteDetalleModel();
         $this->session = session();
         /*
         $this->directoryModel = new DirectoryModel();
@@ -91,5 +93,16 @@ class TrackingController extends BaseController
     {
         $data = $this->tramiteModel->find($id);
         return $this->response->setJSON($data ? ['status'=>'success', 'data'=>$data] : ['status'=>'error']);
+    }
+
+    public function seguimiento($id_tramite) {
+        //$model = new \App\Models\TramiteDetalleModel();
+        $data = $this->tramiteDetailHistory->getSeguimientoCompleto($id_tramite);
+
+        if (!$data) {
+            return $this->response->setJSON(['status' => 'error', 'msg' => 'No hay historial']);
+        }
+
+        return $this->response->setJSON($data);
     }
 }

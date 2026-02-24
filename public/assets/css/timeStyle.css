@@ -1,0 +1,27 @@
+.timeline-v {
+    margin-left: 15px;
+}
+.timeline-v .card {
+    transition: transform 0.2s;
+}
+.timeline-v .card:hover {
+    transform: translateX(5px);
+    border-left: 4px solid #004a99 !important;
+}
+
+.border-transparent {
+    border-color: transparent !important;
+}
+
+.timeline-container {
+    max-height: 450px;
+    overflow-y: auto; /* Permite scroll si el historial es muy largo */
+    padding-right: 10px;
+}
+
+/* Efecto de elevación al pasar el mouse por cada tarjeta de seguimiento */
+.timeline-container .card:hover {
+    transition: all 0.3s ease;
+    transform: translateX(5px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1) !important;
+}

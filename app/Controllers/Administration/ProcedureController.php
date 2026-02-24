@@ -6,11 +6,12 @@ use App\Controllers\BaseController;
 use App\Libraries\KerpClient;
 use App\Models\DocumentModel;
 use App\Models\TipoTramiteModel;
+use App\Models\TramiteDetalleModel;
 use App\Models\TramiteModel;
 
 class ProcedureController extends BaseController
 {
-    protected $tipoTramiteModel, $tramiteModel, $documentModel;
+    protected $tipoTramiteModel, $tramiteModel, $documentModel, $detalleTramite;
     protected $session;
 
     public function __construct()
@@ -18,6 +19,7 @@ class ProcedureController extends BaseController
         $this->tipoTramiteModel = new TipoTramiteModel();
         $this->documentModel = new DocumentModel();
         $this->tramiteModel = new TramiteModel();
+        $this->detalleTramite = new TramiteDetalleModel();
         $this->session = session();
     }
 
@@ -50,8 +52,12 @@ class ProcedureController extends BaseController
         $db->transStart();
         */
         try {
+            $namsolicitante = '';
             // 1. Insertar el Trámite primero para obtener el ID
             $tipoSolicitante = $this->request->getPost('tipo_solicitante');
+            if ($tipoSolicitante == "PROPIETARIO") {
+                $namsolicitante = session('name').' '.session('lastName');
+            } 
             $datosTipo = $this->tipoTramiteModel->find($this->request->getPost('tipo_tramite'));
 
             $dataTramite = [
@@ -59,10 +65,10 @@ class ProcedureController extends BaseController
                 'cite_tramite' => null,
                 'nombre_tramite' => $datosTipo["nombre_tramite"],
                 'estado_tramite'  => 'Por Asignar',
-                'estado_reg' => 'Activo',
+                'estado_reg' => 'PENDIENTE',
                 'observacion' => null,
                 'num_resolucion' => null,
-                'nombre_completo' => null,
+                'nombre_completo' => $namsolicitante ?? null,
                 'tipo_persona' => $tipoSolicitante,
                 'created_user' => session('user') ?? 'system'
             ];
@@ -97,7 +103,18 @@ class ProcedureController extends BaseController
                 ];
             }
 
-            
+            $detalleTramiteObj = [
+                'id_tramite' => $idTramite,
+                'descripcion' => "Pre evaluacion de aceptacion de tramite",
+                'cargo' => 'RECEPCION',
+                'email_empresa'  => '',
+                'cite_tramite' => '',
+                'estado_reg' => 'pendiente',
+                'estado_tramite' => 'VENTANILLA UNICA',
+                'created_user' => session('user') ?? 'system'
+            ];
+
+            $this->detalleTramite->insert($detalleTramiteObj);
 
             foreach ($fileMap as $inputName => $columnName) {
                 $file = $this->request->getFile($inputName);

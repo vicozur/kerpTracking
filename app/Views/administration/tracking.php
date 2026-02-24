@@ -2,6 +2,7 @@
 <?php $this->section('content'); ?>
 <script>
     const TRACKING_URL = "<?= base_url('tracking') ?>";
+    const BASE_URL = '<?= base_url() ?>';
     // 🔑 Generamos las variables CSRF de forma segura
     const CI_CSRF_NAME = '<?= csrf_token() ?>';
     const CI_CSRF_HASH = '<?= csrf_hash() ?>';
@@ -10,6 +11,7 @@
 </script>
 
 <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
+<link rel="stylesheet" href="<?= base_url('assets/css/timeStyle.css') ?>">
 <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
 <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
 
@@ -62,9 +64,12 @@
                     <td><?= $tr['id_tramite'] ?></td>
                     <td><strong><?= esc($tr['nombre_tipo']) ?></strong></td>
                     <td>
-                        <span class="badge bg-<?= ($tr['estado_reg'] == 'PENDIENTE' ? 'warning' : ($tr['estado_reg'] == 'APROBADO' ? 'success' : 'danger')) ?>">
+                        <a href="javascript:void(0);" onclick="verSeguimiento(<?= $tr['id_tramite'] ?>)" class="text-decoration-none">
+                            <span class="badge bg-<?= ($tr['estado_reg'] == 'PENDIENTE' ? 'warning' : ($tr['estado_reg'] == 'APROBADO' ? 'success' : 'danger')) ?>">
                             <?= $tr['estado_reg'] ?>
                         </span>
+                        </a>
+                        
                         <?php if (!empty($tr['observacion'])): ?>
                             <i class="fas fa-exclamation-circle text-danger ms-1" data-bs-toggle="tooltip" title="<?= esc($tr['observacion']) ?>"></i>
                         <?php endif; ?>
@@ -99,6 +104,22 @@
     </table>
 </div>
 
+<div class="modal fade" id="modalSeguimiento" tabindex="-1" aria-labelledby="modalSeguimientoLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title"><i class="bi bi-geo-alt"></i> Seguimiento: <span id="text_cite" class="fw-bold"></span></h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="timeline_content" class="position-relative">
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <script src="<?= base_url('assets/aditional/directoryScript.js') ?>"></script>
+<script src="<?= base_url('assets/aditional/tracking.js') ?>"></script>
 <?php $this->endSection(); ?>

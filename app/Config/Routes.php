@@ -16,7 +16,7 @@ $routes->get('home', 'InicioController::index');         // Página después del
 // Paginas de configuracion tracking
 
 $routes->get('tracking', 'Administration\TrackingController::index');
-
+$routes->get('tracking/seguimiento/(:num)', 'Administration\TrackingController::seguimiento/$1');
 $routes->get('tracking/procedureForm/(:num)', 'Administration\ProcedureController::index/$1');
 $routes->get('tracking/procedureForm', 'Administration\ProcedureController::index');
 $routes->post('tracking/procedureForm/create', 'Administration\ProcedureController::create');
