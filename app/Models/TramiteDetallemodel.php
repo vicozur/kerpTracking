@@ -25,7 +25,6 @@ class TramiteDetalleModel extends Model
     ];
 
     protected $returnType = 'array';
-
     /**
      * Obtiene el historial completo de un trámite específico
      * @param int $id_tramite
